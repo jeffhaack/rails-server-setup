@@ -1,0 +1,13 @@
+This package is all about setting up a new rails server so you can get going with projects rapidly.
+It sets up RVM, ruby, rails, unicorn, nginx, and a postgresql DB to work with.
+
+After running setup.sh, you need to add ssh keys to github in order to pull down private projects
+that are hosted there.  To do this, login to the server as the user that the script creates, and:
+
+ssh-keygen -t rsa -C "your_email@youremail.com"
+
+Copy the contents of ~/.ssh/id_rsa.pub and add to account on github.
+
+Then you can pull down a rails app in the /var/www directory by:
+
+git clone url_of_github_project

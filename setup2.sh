@@ -1,5 +1,15 @@
 #!/bin/sh
 
+readonly USERNAME=jeff
+readonly USERPASS=pleh
+
+readonly POSTGRES_USER=db_user
+readonly POSTGRES_PASS=db_pass
+readonly POSTGRES_DB=db_name
+
+readonly WEBUSER=nginx
+readonly WEBGROUP=web
+
 # Install requisite packages
 add-apt-repository ppa:nginx/stable
 add-apt-repository ppa:pitti/postgresql
@@ -16,13 +26,17 @@ apt-get -y install libc6-dev ncurses-dev automake libtool bison subversion
 # If you want to send mail, install postfix
 # apt-get -y install postfix
 
-# Not sure if I should do all this as another user
-useradd -m jeff -p pleh
-usermod -a -G sudo jeff
+# Create users and groups
+groupadd $WEBGROUP
+useradd -s /sbin/nologin -r $WEBUSER
+usermod -a -G $WEBGROUP $WEBUSER
+useradd -s /bin/bash -m $USERNAME -p $USERPASS
+usermod -a -G sudo $USERNAME
+usermod -a -G $WEBGROUP $USERNAME
 
 # Setup postgresql database for project
-sudo -u postgres psql -c "create user blog with password 'pleh';"
-sudo -u postgres psql -c "create database blog_production owner blog;"
+sudo -u postgres psql -c "create user $POSTGRES_USER with password '$POSTGRES_PASS';"
+sudo -u postgres psql -c "create database $POSTGRES_DB owner $POSTGRES_USER;"
 
 # Install RVM
 sudo bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)
@@ -36,11 +50,6 @@ rvm --default use 1.9.2
 # Install rails
 gem install rails
 gem install unicorn
-
-# Create user and group for nginx
-groupadd web
-useradd -s /sbin/nologin -r nginx
-usermod -a -G web nginx
 
 service nginx start
 
