@@ -1,0 +1,51 @@
+# I basically am doing all this as root but create a user jeff in case I want/can use it later
+
+sudo apt-get update
+sudo apt-get -y install aptitude
+
+sudo aptitude -y install curl git-core
+sudo aptitude -y install build-essential bison openssl libreadline6 libreadline6-dev zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev nodejs
+sudo aptitude -y install libcurl4-openssl-dev
+
+curl -L get.rvm.io | bash -s stable
+
+# Follow instructions to enable rvm
+
+# adduser jeff, add root and jeff to both sudo group and rvm group
+
+rvm install 1.9.2
+gem install rails
+gem install passenger
+sudo passenger-install-nginx-module
+
+sudo apt-get install libmysql-ruby libmysqlclient-dev
+
+mysql -u root -p
+select user,host from mysql.user; # see existing user accounts
+create user 'new-username'@'localhost' identified by 'password-for-new-account';
+create database addressAPI_production;
+grant all on mydatabase.* to useraccount@localhost
+
+################### for postgresql ##############
+aptitude -y install postgresql libpq-dev nodejs
+# Setup postgresql database for project
+sudo -u postgres psql -c "create user addressAPI with password 'yabl0ng6';"
+sudo -u postgres psql -c "create database addressAPI_production owner addressAPI;"
+###################################################
+
+# To start, and stop nginx
+pkill nginx
+sudo /opt/nginx/sbin/nginx
+
+# Setup web directory
+mkdir /var/www
+chgrp -R web /var/www # set /var/www owner group to "web"
+chmod -R 775 /var/www # group write permission
+
+
+
+
+
+
+
+
