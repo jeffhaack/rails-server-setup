@@ -1,25 +1,21 @@
-This package is all about setting up a new rails server so you can get going with projects rapidly.
-It sets up RVM, ruby, rails, unicorn, nginx, and a postgresql DB to work with.
+# This package is all about setting up a new rails server so you can get going with projects rapidly.
+# It sets up RVM, ruby, rails, unicorn, nginx, and a postgresql DB to work with.
 
-On a newly setup Ubuntu server, login as root and run:
+# On a newly setup Ubuntu 11 server, login as root and run:
 
 apt-get update
 apt-get install git-core
 
-You need to add ssh keys to github.  To do this, login to the server as the user that the script creates, and:
+# You need to add ssh keys to github.  To do this, login to the server as the user that the script creates, and:
 
 ssh-keygen -t rsa -C "your_email@youremail.com"
 
-Copy the contents of ~/.ssh/id_rsa.pub and add to account on github. Then
+# Copy the contents of ~/.ssh/id_rsa.pub and add to account on github. Then
 
 git clone git@github.com:jeffhaack/rails-server-setup.git
 cd rails-server-setup
-# Edit the setup.sh file as necessary
+
+# Edit the setup files as necessary (setup files are provided to automate certain tasks, but see the different READMEs for specific instructions)
 chmod +x setup.sh
 ./setup.sh
 
-
-
-Then you can pull down a rails app in the /var/www directory by:
-
-git clone url_of_github_project

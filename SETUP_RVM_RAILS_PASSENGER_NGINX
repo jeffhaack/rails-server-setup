@@ -6,6 +6,11 @@ sudo apt-get -y install aptitude
 sudo aptitude -y install curl git-core
 sudo aptitude -y install build-essential bison openssl libreadline6 libreadline6-dev zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev nodejs
 sudo aptitude -y install libcurl4-openssl-dev
+sudo aptitude -y install mysql-server
+
+#########################################################################
+### Commands above are scripted in setup_rvm_rails_passenger_nginx.sh ###
+#########################################################################
 
 curl -L get.rvm.io | bash -s stable
 
@@ -16,15 +21,17 @@ curl -L get.rvm.io | bash -s stable
 rvm install 1.9.2
 gem install rails
 gem install passenger
-sudo passenger-install-nginx-module
+passenger-install-nginx-module
 
-sudo apt-get install libmysql-ruby libmysqlclient-dev
+
+
+sudo apt-get -y install libmysql-ruby libmysqlclient-dev
 
 mysql -u root -p
 select user,host from mysql.user; # see existing user accounts
 create user 'new-username'@'localhost' identified by 'password-for-new-account';
-create database addressAPI_production;
-grant all on mydatabase.* to useraccount@localhost
+create database addressAPI_production CHARACTER SET utf8 COLLATE utf8_general_ci;
+grant all on addressAPI_production.* to addressAPI@localhost;
 
 ################### for postgresql ##############
 aptitude -y install postgresql libpq-dev nodejs
@@ -42,10 +49,6 @@ mkdir /var/www
 chgrp -R web /var/www # set /var/www owner group to "web"
 chmod -R 775 /var/www # group write permission
 
-
-
-
-
-
-
+# Generate keys
+ssh-keygen -t rsa -C "jeff.haack@gmail.com"
 
