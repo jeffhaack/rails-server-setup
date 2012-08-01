@@ -8,12 +8,6 @@ sudo apt-get update
 # the big list of apt dependencies to check we have installed
 sudo apt-get -y install postgis postgresql-9.1 postgresql-server-dev-9.1 postgresql-contrib-9.1 postgis  gdal-bin binutils libgeos-3.2.0 libgeos-c1 libgeos-dev libgdal1-dev libxml2 libxml2-dev libxml2-dev checkinstall proj libpq-dev
 
-# If you want, change the postgres password
-su postgres
-psql -d postgres -U postgres
-alter user postgres with password 'a';
-\q
-
 # make a directory for the postgis scripts
 sudo mkdir -p '/usr/share/postgresql/9.1/contrib/postgis-1.5'
 
@@ -32,26 +26,3 @@ sudo su postgres -c'psql -U postgres -d template_postgis -c"select postgis_lib_v
 sudo su postgres -c'psql -U postgres -d template_postgis -c "GRANT ALL ON geometry_columns TO PUBLIC;"'
 sudo su postgres -c'psql -U postgres -d template_postgis -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"'
 sudo su postgres -c'psql -U postgres -d template_postgis -c "GRANT ALL ON geography_columns TO PUBLIC;"'
-
-
-# Set up pg related gems (see http://www.daniel-azuma.com/blog/archives/69)
-gem install pg -- --with-pg-config=/usr/bin/pg_config
-gem install rgeo
-gem install activerecord-postgis-adapter
-
-# Create a postgresql superuser for your project (not the best idea but whatever...)
-createuser --pwprompt --superuser geo_rails_test_creator
-
-# May need to edit pg_hba.conf
-
-# Set up a new rails app with postgresql as database
-rails new geo_rails_test -d postgresql
-
-# Add to Gemfile
-gem 'activerecord-postgis-adapter'
-
-# Add to config/application.rb under 'rails/all'
-require 'active_record/connection_adapters/postgis_adapter/railtie'
-
-# Edit config/database.yml - it will look something like this for each db:
-geography_columns
